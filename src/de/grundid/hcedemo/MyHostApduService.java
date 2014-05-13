@@ -36,4 +36,5 @@ public class MyHostApduService extends HostApduService {
 	public void onDeactivated(int reason) {
 		Log.i("HCEDEMO", "Deactivated: " + reason);
 	}
+	
 }

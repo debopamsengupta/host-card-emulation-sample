@@ -3,10 +3,11 @@
     android:requireDeviceUnlock="false" >
 
     <aid-group
-        android:category="other"
-        android:description="@string/aiddescription" >
-        <aid-filter android:name="F0010203040506" />
-        <aid-filter android:name="F0394148148100" />
+        android:category="payment"
+        android:description="@string/aiddescription" 
+        android:apduServiceBanner="@drawable/my_banner" >
+        <aid-filter android:name="A0000000041010" />
+        <aid-filter android:name="A0000000031010" />
     </aid-group>
 
 </host-apdu-service>
