@@ -34,7 +34,7 @@ public class MyScanActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_scan_card);
 		
         resultTextView = (TextView)findViewById(R.id.TextView);
 		scanButton = (Button)findViewById(R.id.scanbtn);
