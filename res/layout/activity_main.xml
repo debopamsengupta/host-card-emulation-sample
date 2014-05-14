@@ -2,25 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
- 	<Button
- 	    android:id="@+id/scanbtn"
- 	    android:layout_width="match_parent"
- 	    android:layout_height="wrap_content"
- 	    android:text="@string/scanbutton"
- 	    android:onClick="onScanPress" />
+    <TextView
+        android:id="@+id/activity_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
 
- 	<TextView
- 	    android:id="@+id/TextView"
- 	    android:layout_width="match_parent"
- 	    android:layout_height="80dp"
- 	    android:layout_alignLeft="@+id/scanbtn"
- 	    android:layout_below="@+id/scanbtn"
- 	    android:layout_marginTop="40dp" />
+	<Button
+	    android:id="@+id/carddetailsbtn"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:text="@string/carddetails" />
     
 </RelativeLayout>

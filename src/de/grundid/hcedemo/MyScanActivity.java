@@ -1,21 +1,29 @@
 package de.grundid.hcedemo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.cardemulation.CardEmulation;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MyScanActivity extends Activity
-{
-	
-    private static final String MY_CARDIO_APP_TOKEN = "accd15094aca4fea91167f831469fdd7";
+public class MyScanActivity extends Activity{
+
+	private static final String MY_CARDIO_APP_TOKEN = "accd15094aca4fea91167f831469fdd7";
 
 	final String TAG = getClass().getName();
-
+	
 	private Button scanButton;
 	private TextView resultTextView;
 
@@ -27,8 +35,8 @@ public class MyScanActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		resultTextView = (TextView)findViewById(R.id.TextView);
+		
+        resultTextView = (TextView)findViewById(R.id.TextView);
 		scanButton = (Button)findViewById(R.id.scanbtn);
 	
 	}
@@ -86,8 +94,11 @@ public class MyScanActivity extends Activity
 		else {
 			resultStr = "Scan was canceled.";
 		}
+		
 		resultTextView.setText(resultStr);
-
+		
 	}
+	
+	
 }
 

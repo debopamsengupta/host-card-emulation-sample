@@ -1,64 +1,105 @@
 package de.grundid.hcedemo;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcAdapter.ReaderCallback;
-import android.nfc.Tag;
-import android.nfc.tech.IsoDep;
+import android.nfc.cardemulation.CardEmulation;
 import android.os.Bundle;
-import android.widget.ListView;
-import de.grundid.hcedemo.IsoDepTransceiver.OnMessageReceived;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnMessageReceived, ReaderCallback {
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-	private NfcAdapter nfcAdapter;
-	private ListView listView;
-	private IsoDepAdapter isoDepAdapter;
 
-	@Override
+public class MainActivity extends Activity {
+
+    private static TextView activityLog;
+    private static final StringBuilder logCache = new StringBuilder();
+    private static final DateFormat timeStampFmt = new SimpleDateFormat("HH:mm:ss.SSS  ");
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    
+     
+    private static void log(String tag, Object... messageFragments) {
+        StringBuilder message = new StringBuilder();
+        for(Object fragment : messageFragments) {
+            message.append(fragment.toString());
+        }
+        String text = message.toString();
+
+        logCache.append(timeStampFmt.format(new Date())).append(tag).append(" ").append(text).append('\n');
+
+        // any logging before activityLog is initialized does not get
+        // cleared and will be printed to the screen later
+        if (activityLog != null) {
+            activityLog.append(logCache);
+            logCache.setLength(0);
+        }
+
+        
+    }
+
+
+    private static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle data = msg.getData();
+            log(data.getString("tag"), (Object[])data.getStringArray("messageFragments"));
+            super.handleMessage(msg);
+        }
+    };
+
+
+    public static void sendLog(String tag, String ...messageFragments) {
+        Message message = Message.obtain();
+        Bundle data = new Bundle();
+        data.putString("tag", tag);
+        data.putStringArray("messageFragments", messageFragments);
+        message.setData(data);
+        handler.sendMessage(message);
+    }
+
+    Button carddetails;
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
-		listView = (ListView)findViewById(R.id.listView);
-		isoDepAdapter = new IsoDepAdapter(getLayoutInflater());
-		listView.setAdapter(isoDepAdapter);
-		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        activityLog = (TextView) findViewById(R.id.activity_log);
+
+        CardEmulation cardEmulationManager = CardEmulation.getInstance(NfcAdapter.getDefaultAdapter(this));
+        ComponentName paymentServiceComponent =
+                new ComponentName(getApplicationContext(), MyHostApduService.class.getCanonicalName());
+
+        if (!cardEmulationManager.isDefaultServiceForCategory(paymentServiceComponent, CardEmulation.CATEGORY_PAYMENT)) {
+    		Intent intent = new Intent(CardEmulation.ACTION_CHANGE_DEFAULT);
+    		intent.putExtra(CardEmulation.EXTRA_CATEGORY, CardEmulation.CATEGORY_PAYMENT);
+    		intent.putExtra(CardEmulation.EXTRA_SERVICE_COMPONENT, paymentServiceComponent);
+    		startActivityForResult(intent, 0);
+            log(TAG, "Card Tap and pay is the default payment app");
+        } else {
+            log(TAG, "Card Tap and pay is the default NFC payment app");
+        }
+        carddetails=(Button)findViewById(R.id.carddetailsbtn);
+        carddetails.setOnClickListener(new View.OnClickListener() {
+    		public void onClick(View v) {
+    				    			 
+    			Intent cardscan=new Intent(getApplicationContext(),MyScanActivity.class);
+    			startActivity(cardscan);
+    				
+    			}
+    		});
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		nfcAdapter.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
-				null);
-	}
+   
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		nfcAdapter.disableReaderMode(this);
-	}
-
-	@Override
-	public void onTagDiscovered(Tag tag) {
-		IsoDep isoDep = IsoDep.get(tag);
-		IsoDepTransceiver transceiver = new IsoDepTransceiver(isoDep, this);
-		Thread thread = new Thread(transceiver);
-		thread.start();
-	}
-
-	@Override
-	public void onMessage(final byte[] message) {
-		runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				isoDepAdapter.addMessage(new String(message));
-			}
-		});
-	}
-
-	@Override
-	public void onError(Exception exception) {
-		onMessage(exception.getMessage().getBytes());
-	}
 }

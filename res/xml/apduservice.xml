@@ -5,9 +5,10 @@
     <aid-group
         android:category="payment"
         android:description="@string/aiddescription" 
-        android:apduServiceBanner="@drawable/my_banner" >
-        <aid-filter android:name="A0000000041010" />
-        <aid-filter android:name="A0000000031010" />
+        android:apduServiceBanner="@drawable/ic_launcher" >
+        <aid-filter android:name="325041592E5359532E4444463031" android:description="@string/PPSE"/>
+        <aid-filter android:name="A0000000041010" android:description="@string/Visa"/>
+        <aid-filter android:name="A0000000031010" android:description="@string/MasterCard"/>
     </aid-group>
 
 </host-apdu-service>
