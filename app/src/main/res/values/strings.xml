@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Card Scan and Tap</string>
+    <string name="action_settings">Settings</string>
+    <string name="carddetails">Card Details</string>
+    <string name="aiddescription">aiddescription</string>
+    <string name="servicedesc">Card Scan and Tap</string>
+	<string name="servicedesc2">servicedesc2</string>
+	<string name="scanbutton">Scan your Credit Card</string>
+	<string name="PPSE">PPSE</string>
+	<string name="Visa">VISA</string>
+	<string name="MasterCard">MASTERCARD</string>
+	
+</resources>
